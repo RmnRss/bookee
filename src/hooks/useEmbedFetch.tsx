@@ -14,6 +14,8 @@ function useEmbedFetch() {
   const [loading, setLoading] = useState(false);
 
   const fetchEmbed = useCallback(async (link: string) => {
+    setLoading(true);
+
     const params = new URLSearchParams({ url: link });
     const url = new URL(`/embed?${params.toString()}`, API_URL);
 
