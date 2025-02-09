@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import "./App.css";
 import BookmarkItem from "./components/BookmarkItem";
+import { FLICKR_DOMAIN, VIMEO_DOMAIN } from "./constants";
 import useEmbedFetch from "./hooks/useEmbedFetch";
 import { Bookmark } from "./types";
 import { parseBookmark } from "./utils";
@@ -51,16 +52,18 @@ function App() {
     async (formData: FormData) => {
       const link = formData.get("url") as string;
 
+      console.log({ link });
+
       if (link !== undefined && link !== "" && link.startsWith("https://")) {
-        console.log(link);
+        if (link.includes(FLICKR_DOMAIN) || link.includes(VIMEO_DOMAIN)) {
+          const data = await fetchEmbed(link);
 
-        const data = await fetchEmbed(link);
+          const newBookmark = parseBookmark(data);
 
-        console.log(data);
-
-        const newBookmark = parseBookmark(data);
-
-        addBookmark(newBookmark);
+          addBookmark(newBookmark);
+        } else {
+          alert("Link not supported. Please enter a Flickr or a Vimeo link");
+        }
       } else {
         alert("Please enter a valid url");
       }
