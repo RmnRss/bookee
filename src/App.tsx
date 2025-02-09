@@ -17,11 +17,9 @@ function App() {
    * But for the app usage it's probably overdoing it
    */
   const addBookmark = useCallback(
-    (b: Bookmark) => {
-      if (bookmarks.find((bm) => bm.url === b.url) === undefined) {
-        const current = [...bookmarks];
-        current.push(b);
-        setBookmarks(current);
+    (newBookmark: Bookmark) => {
+      if (bookmarks.find((bm) => bm.url === newBookmark.url) === undefined) {
+        setBookmarks([...bookmarks, newBookmark]);
       } else {
         alert("This bookmark already exist");
       }
@@ -35,11 +33,7 @@ function App() {
    */
   const deleteBookmark = useCallback(
     (url: string) => {
-      const newArray = [...bookmarks].filter(
-        (aBookmark) => url !== aBookmark.url
-      );
-
-      setBookmarks(newArray);
+      setBookmarks(bookmarks.filter((aBookmark) => url !== aBookmark.url));
     },
     [bookmarks]
   );
@@ -51,8 +45,6 @@ function App() {
   const handleSubmit = useCallback(
     async (formData: FormData) => {
       const link = formData.get("url") as string;
-
-      console.log({ link });
 
       if (link !== undefined && link !== "" && link.startsWith("https://")) {
         if (link.includes(FLICKR_DOMAIN) || link.includes(VIMEO_DOMAIN)) {
