@@ -1,42 +1,80 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+  max-width: 800px;
+  margin: 0 24px;
+  width: 100%;
+  align-self: center;
 }
 
 .card {
   padding: 2em;
 }
 
-.read-the-docs {
-  color: #888;
+.bookmark-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 32px;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #484848;
+  border-radius: 8px;
+  background-color: #323232;
+}
+
+.bookmark-item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  overflow: hidden;
+
+  background-color: #323232;
+
+  border: 1px solid #484848;
+  border-radius: 8px;
+
+  width: 100%;
+  max-width: 512px;
+}
+
+.bookmark-content {
+  display: flex;
+  flex-direction: column;
+
+  padding: 16px;
+  gap: 4px;
+}
+
+.bookmark-footer {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-top: 1px solid #484848;
+}
+
+.bg-danger {
+  background-color: red;
+}
+
+.error {
+  text-align: center;
+  color: red;
+}
+
+.list {
+  display: flex;
+  flex-direction: column-reverse;
+
+  gap: 16px;
+
+  align-items: center;
+  justify-content: flex-start;
 }

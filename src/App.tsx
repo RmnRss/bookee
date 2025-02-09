@@ -1,35 +1,93 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import BookmarkItem from "./components/BookmarkItem";
+import useEmbedFetch from "./hooks/useEmbedFetch";
+import { Bookmark } from "./types";
+import { parseBookmark } from "./utils";
 
 function App() {
-  const [count, setCount] = useState(0)
+  // could also be local storage
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+
+  const { fetchEmbed, error, loading } = useEmbedFetch();
+
+  /** Add a bookmark if it doesn't already exists */
+  const addBookmark = (b: Bookmark) => {
+    if (bookmarks.find((bm) => bm.url === b.url) === undefined) {
+      const current = [...bookmarks];
+      current.push(b);
+      setBookmarks(current);
+    } else {
+      alert("This bookmark already exist");
+    }
+  };
+
+  // Remove from state
+  const deleteBookmark = (url: string) => {
+    const newArray = [...bookmarks].filter(
+      (aBookmark) => url !== aBookmark.url
+    );
+
+    setBookmarks(newArray);
+  };
+
+  // Fetch
+  // Parse
+  // Add
+  const handleSubmit = async (formData: FormData) => {
+    const link = formData.get("url") as string;
+
+    if (link !== undefined && link !== "" && link.startsWith("https://")) {
+      console.log(link);
+
+      const data = await fetchEmbed(link);
+
+      console.log(data);
+
+      const newBookmark = parseBookmark(data);
+
+      addBookmark(newBookmark);
+    } else {
+      alert("Please enter a valid url");
+    }
+  };
+
+  console.log(bookmarks);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <h1 style={{ textAlign: "center" }}>Bookee</h1>
+      {/* FORM */}
+      <form action={handleSubmit} className="bookmark-form">
+        <input
+          type="text"
+          placeholder="Enter a Vimeo or a Flicker url"
+          id="url"
+          name="url"
+          required
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Add Bookmark!"}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        {error !== null ? <p className="error">{error}</p> : null}
+      </form>
+
+      {/* LIST */}
+      <div className="list">
+        {bookmarks.length < 1 ? (
+          <p>{`No Bookmarks :(`}</p>
+        ) : (
+          bookmarks.map((bm) => (
+            <BookmarkItem
+              key={bm.url}
+              bookmark={bm}
+              onRemove={deleteBookmark}
+            />
+          ))
+        )}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
