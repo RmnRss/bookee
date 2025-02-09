@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import "./App.css";
 import BookmarkItem from "./components/BookmarkItem";
 import useEmbedFetch from "./hooks/useEmbedFetch";
@@ -11,48 +11,62 @@ function App() {
 
   const { fetchEmbed, error, loading } = useEmbedFetch();
 
-  /** Add a bookmark if it doesn't already exists */
-  const addBookmark = (b: Bookmark) => {
-    if (bookmarks.find((bm) => bm.url === b.url) === undefined) {
-      const current = [...bookmarks];
-      current.push(b);
-      setBookmarks(current);
-    } else {
-      alert("This bookmark already exist");
-    }
-  };
+  /**
+   * Used a callback because it might be used a bunch
+   * But for the app usage it's probably overdoing it
+   */
+  const addBookmark = useCallback(
+    (b: Bookmark) => {
+      if (bookmarks.find((bm) => bm.url === b.url) === undefined) {
+        const current = [...bookmarks];
+        current.push(b);
+        setBookmarks(current);
+      } else {
+        alert("This bookmark already exist");
+      }
+    },
+    [bookmarks]
+  );
 
-  // Remove from state
-  const deleteBookmark = (url: string) => {
-    const newArray = [...bookmarks].filter(
-      (aBookmark) => url !== aBookmark.url
-    );
+  /**
+   * Used a callback because it might be used a bunch
+   * But for the app usage it's probably overdoing it
+   */
+  const deleteBookmark = useCallback(
+    (url: string) => {
+      const newArray = [...bookmarks].filter(
+        (aBookmark) => url !== aBookmark.url
+      );
 
-    setBookmarks(newArray);
-  };
+      setBookmarks(newArray);
+    },
+    [bookmarks]
+  );
 
-  // Fetch
-  // Parse
-  // Add
-  const handleSubmit = async (formData: FormData) => {
-    const link = formData.get("url") as string;
+  /**
+   * Used a callback because it might be used a bunch
+   * But for the app usage it's probably overdoing it
+   */
+  const handleSubmit = useCallback(
+    async (formData: FormData) => {
+      const link = formData.get("url") as string;
 
-    if (link !== undefined && link !== "" && link.startsWith("https://")) {
-      console.log(link);
+      if (link !== undefined && link !== "" && link.startsWith("https://")) {
+        console.log(link);
 
-      const data = await fetchEmbed(link);
+        const data = await fetchEmbed(link);
 
-      console.log(data);
+        console.log(data);
 
-      const newBookmark = parseBookmark(data);
+        const newBookmark = parseBookmark(data);
 
-      addBookmark(newBookmark);
-    } else {
-      alert("Please enter a valid url");
-    }
-  };
-
-  console.log(bookmarks);
+        addBookmark(newBookmark);
+      } else {
+        alert("Please enter a valid url");
+      }
+    },
+    [addBookmark, fetchEmbed]
+  );
 
   return (
     <>

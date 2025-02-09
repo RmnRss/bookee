@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { API_URL } from "../constants";
 
 const headers = new Headers();
@@ -13,7 +13,7 @@ function useEmbedFetch() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchEmbed = async (link: string) => {
+  const fetchEmbed = useCallback(async (link: string) => {
     const params = new URLSearchParams({ url: link });
     const url = new URL(`/embed?${params.toString()}`, API_URL);
 
@@ -32,7 +32,7 @@ function useEmbedFetch() {
       setError(error.message);
       setLoading(false);
     }
-  };
+  }, []);
 
   return { fetchEmbed, error, loading };
 }
