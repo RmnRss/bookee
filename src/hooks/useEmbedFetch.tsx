@@ -1,20 +1,24 @@
 import { useState } from "react";
 import { API_URL } from "../constants";
 
+const headers = new Headers();
+headers.append("Content-Type", "application/json");
+
 /**
  * Hook that returns an object with utils to fetch towards the API
+ * We could create two hooks, one with the basic fetch logic and another using the API URL
+ * But in this case it's kinda over doing it
  */
 function useEmbedFetch() {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Could be separated from the API URL so it can accept any url
-  // But in this case we only have one source so it's not that useful
   const fetchEmbed = async (link: string) => {
-    const url = `${API_URL}?url=${link}`;
+    const params = new URLSearchParams({ url: link });
+    const url = new URL(`/embed?${params.toString()}`, API_URL);
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, { method: "GET", headers });
 
       if (!response.ok) {
         throw new Error(`Status: ${response.status}`);

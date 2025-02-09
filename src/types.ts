@@ -1,5 +1,6 @@
 export interface RawBookmark {
-  upload_date: string;
+  /** Vimeo Only ? */
+  upload_date?: string;
   author_name: string;
   url: string;
   title: string;
@@ -13,35 +14,18 @@ export interface RawBookmark {
   duration?: number;
 }
 
-export interface VimeoBookmark {
-  /** video */
-  thumbnail?: string;
-  url: string;
-  title: string;
-  author: string;
-  creation: Date;
-  upload: Date;
-  duration: number;
-}
-
-export interface FlickrBookmark {
+export interface Bookmark {
   /** photo */
   thumbnail: string;
   url: string;
   title: string;
   author: string;
   creation: Date;
-  upload: Date;
-  dimensions: {
+  upload?: Date;
+  provider: string;
+  duration?: number;
+  dimensions?: {
     height: number;
     width: number;
   };
 }
-
-export type Bookmark = VimeoBookmark | FlickrBookmark;
-
-export const isFlickrBookmark = (
-  bookmark: Bookmark
-): bookmark is FlickrBookmark => {
-  return "dimensions" in bookmark;
-};
