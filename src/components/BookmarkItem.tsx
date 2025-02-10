@@ -51,7 +51,7 @@ const BookmarkItem: FC<BookmarkProps> = ({ bookmark, onRemove }) => {
         <p>{bookmark.provider}</p>
 
         <button onClick={() => onRemove(bookmark.url)} className="bg-danger">
-          Delete
+          Supprimer
         </button>
       </div>
     </div>

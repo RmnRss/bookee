@@ -21,7 +21,7 @@ function App() {
       if (bookmarks.find((bm) => bm.url === newBookmark.url) === undefined) {
         setBookmarks([...bookmarks, newBookmark]);
       } else {
-        alert("This bookmark already exist");
+        alert("Le marque page éxiste déjà");
       }
     },
     [bookmarks]
@@ -54,10 +54,10 @@ function App() {
 
           addBookmark(newBookmark);
         } else {
-          alert("Link not supported. Please enter a Flickr or a Vimeo link");
+          alert("Lien non supporté. Entrez un lien Flickr ou Vimeo.");
         }
       } else {
-        alert("Please enter a valid url");
+        alert("Le lien renseigné n'est pas valide");
       }
     },
     [addBookmark, fetchEmbed]
@@ -76,7 +76,7 @@ function App() {
           required
         />
         <button type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Add Bookmark!"}
+          {loading ? "Chargement..." : "Ajouter!"}
         </button>
         {error !== null ? <p className="error">{error}</p> : null}
       </form>
